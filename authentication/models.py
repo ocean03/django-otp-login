@@ -4,19 +4,15 @@ from django.utils.timezone import now
 
 
 class User(AbstractUser):
-    otp = models.CharField(max_length=6, blank=True, verbose_name=_('OTP'))
+    mobile = models.CharField(max_length=12)
+    otp = models.CharField(max_length=6, blank=True)
     last_update_date_time = models.DateTimeField(default=now, blank=True, null=True)
-    is_vendor = models.BooleanField(default=False)
-    is_ebyer = models.BooleanField(default=False)
-    is_driver = models.BooleanField(default=False)
-    phone_verified = models.BooleanField(default=False)
-    email_verified = models.BooleanField(default=False)
 
     class Meta:
         db_table = 'UserProfile'
 
     def __str__(self):
-        return f"{self.first_name} {self.last_name}"
+        return self.email
 
     def check_otp(self, password):
         if password != self.otp:

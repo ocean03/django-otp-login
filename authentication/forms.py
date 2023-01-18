@@ -1,7 +1,7 @@
 from django.contrib.auth.forms import UserCreationForm
-from django.forms import forms
+from django import forms
 
-from auth.models import User
+from authentication.models import User
 
 
 class SignUpForm(UserCreationForm):
@@ -17,3 +17,7 @@ class SignUpForm(UserCreationForm):
             'password1',
             'password2',
             ]
+
+class LoginForm(forms.Form):
+    mobile = forms.CharField(max_length=63)
+    otp = forms.CharField(max_length=63, widget=forms.PasswordInput)
