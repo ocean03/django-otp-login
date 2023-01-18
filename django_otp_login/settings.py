@@ -81,8 +81,8 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'custom-auth',
-        'USER': 'root',
-        'PASSWORD': 'root',
+        'USER': '<mysql user>',
+        'PASSWORD': '<pasword>',
     }
 }
 
