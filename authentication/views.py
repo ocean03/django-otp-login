@@ -20,15 +20,14 @@ class SignUpView(CreateView):
     template_name = 'signup.html'
 
 
-def send_otp(request, username):
-    username = username
-    if username is not None:
-        if len(username) == 10 and username.isdigit():
-            is_exists = User.objects.filter(username=username).first()
-            if is_exists:
+def send_otp(request, mobile):
+    mobile = mobile
+    if mobile is not None:
+        if len(mobile) == 10 and mobile.isdigit():
+            user_obj = User.objects.filter(mobile=mobile).first()
+            if user_obj:
                 from django.utils.crypto import get_random_string
                 otp_number = get_random_string(length=6, allowed_chars='0123456789')
-                user_obj = User.objects.get(username=username)
                 user_obj.otp = otp_number
                 user_obj.last_update_date_time = now()
                 user_obj.save()
@@ -46,17 +45,17 @@ def send_otp(request, username):
 def verify_otp(request):
     data = {}
     time_threshold = now() - timedelta(minutes=5)
-    mobile = request.POST['mobile']
-    is_user = User.objects.filter(mobile=mobile, last_update_date_time__lt=now(), last_update_date_time__gt=time_threshold)
+    mobile = request.POST['phone']
+    is_user = User.objects.filter(mobile=mobile).first()
     password = request.POST['otp']
-
-    if len(is_user) == 0:
-        data['error'] = "OTP expired."
-    else:
+    print(is_user)
+    if is_user:
         user = authenticate(username=is_user.username, password=password)
         if user:
             login(request, user)
             return redirect('home')
         else:
             data['error'] = "somthing went wong please try again."
+    else:
+        data['error'] = "OTP expired."
     return render(request, "login.html", {'data': data})

@@ -1,5 +1,5 @@
 from django.contrib.auth.backends import ModelBackend
-from auth.models import User
+from authentication.models import User
 
 
 class CustomAuthBackend(ModelBackend):

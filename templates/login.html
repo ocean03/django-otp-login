@@ -7,13 +7,13 @@
 {% if data.error %}
        <strong>Error!</strong> {{ data.error }}
 {% endif %}
-
-<form name="otp_login" id="otp_login" method="post" action="login">
+<div id="msg">&nbsp;</div>
+<form name="otp_login" id="otp_login" method="post" action="verify_otp">
     {% csrf_token %}
     <input type="text" name="phone" placeholder="Enter Mobile Number">
     <input type="button" onclick="get_otp()" id="btn-otp" value="Get Otp">
     <br><br>
-    <input id="otp" type="password" name="otp" placeholder="Enter otp">
+    <input id="otp" type="number" name="otp" placeholder="Enter otp">
     <input type="submit" value="Verify OTP">
     <br><br>
     <a href="#" onclick="get_otp()" style="padding-top: 25px;">
