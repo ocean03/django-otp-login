@@ -11,3 +11,10 @@ def send_email(user=None, email=None, message=None, subject=None):
         send_mail(subject, msg, email_from, recipient_list)
     except Exception:
         pass
+
+
+def send_sms(otp=None, message=None):
+    msg = f"Your login otp is {otp}."
+    if message is not None:
+        msg = message
+    print(msg)

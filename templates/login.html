@@ -1,6 +1,58 @@
-<h2>Login</h2>
-<form method="post">
+{% include "base.html" %}
+
+{% block title %}Login Page{% endblock title %}
+
+{% block content %}
+
+{% if data.error %}
+       <strong>Error!</strong> {{ data.error }}
+{% endif %}
+
+<form name="otp_login" id="otp_login" method="post" action="login">
     {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Login</button>
+    <input type="text" name="phone" placeholder="Enter Mobile Number">
+    <input type="button" onclick="get_otp()" id="btn-otp" value="Get Otp">
+    <br><br>
+    <input id="otp" type="password" name="otp" placeholder="Enter otp">
+    <input type="submit" value="Verify OTP">
+    <br><br>
+    <a href="#" onclick="get_otp()" style="padding-top: 25px;">
+      Resend OTP
+    </a>
 </form>
+{% endblock content %}
+
+{% block javascripts %}
+  <script type="text/javascript">
+    $(function () {
+      $('#otp').hide();
+      $('#btn-login').hide();
+    })
+
+    function get_otp() {
+      let phone = document.forms['otp_login'].phone.value;
+      $.ajax({
+        url: "/send_otp/" + phone, // the endpoint
+        type: "GET", // http method
+
+        success: function (res) {
+          console.log(res); // log the returned json to the console
+          document.getElementById('msg').innerHTML = "<button type='button' data-dismiss='alert' aria-label='Close'>\
+            <strong>"+ res.message + "</strong>";
+          //console.log("success"); // another sanity check
+          if (res.otp){
+            $('#btn-otp').hide();
+            $('#otp').show();
+            $('#btn-login').show();
+          }
+        },
+
+        // handle a non-successful response
+        error: function (xhr, errmsg, err) {
+          $('#results').html(errmsg); // add the error to the dom
+          // console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+        }
+      })
+    };
+  </script>
+  {% endblock javascripts %}
