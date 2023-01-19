@@ -1,3 +1,5 @@
+from datetime import timedelta
+
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.utils.timezone import now
@@ -20,3 +22,10 @@ class User(AbstractUser):
         if password != self.otp:
             return False
         return True
+
+    def is_blocked(self):
+        time_threshold = now() - timedelta(minutes=5)
+        if self.login_attempts >= 3:
+            if self.last_update_date_time < now() and self.last_update_date_time > time_threshold:
+                return True
+        return False

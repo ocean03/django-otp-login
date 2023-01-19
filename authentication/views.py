@@ -24,7 +24,7 @@ def send_otp(request, mobile):
     if mobile is not None:
         if len(mobile) == 10 and mobile.isdigit():
             user_obj = User.objects.filter(mobile=mobile).first()
-            if user_obj:
+            if user_obj and not user_obj.is_blocked():
                 from django.utils.crypto import get_random_string
                 otp_number = get_random_string(length=6, allowed_chars='0123456789')
                 user_obj.otp = otp_number
