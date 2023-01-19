@@ -9,7 +9,7 @@ from django.utils.timezone import now
 
 from django.views.generic import CreateView
 
-from authentication.forms import SignUpForm
+from authentication.forms import SignUpForm, UserUpdateForm
 from authentication.helpers import send_sms
 from authentication.models import User
 
@@ -66,3 +66,16 @@ def verify_otp(request):
     else:
         data['error'] = "OTP expired or You are temporarily blocked. please try after 5 min"
     return render(request, "login.html", {'data': data})
+
+
+def update_profile(request):
+    if request.method == 'POST':
+        form = UserUpdateForm(request.POST,instance=request.user)
+        if form.is_valid():
+            form.save()
+            return redirect('home')
+    else:
+        form = UserUpdateForm(instance=request.user)
+
+    context={'form': form}
+    return render(request, 'profile.html',context )

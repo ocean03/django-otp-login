@@ -25,6 +25,7 @@ class SignUpForm(UserCreationForm):
             send_email(user=user, email=user.email)
         return user
 
-class LoginForm(forms.Form):
-    mobile = forms.CharField(max_length=63)
-    otp = forms.CharField(max_length=63, widget=forms.PasswordInput)
+class UserUpdateForm(forms.ModelForm):
+    class Meta:
+        model=User
+        fields=['alternate_email']
