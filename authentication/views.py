@@ -1,5 +1,4 @@
 import json
-from datetime import timedelta
 
 from django.contrib.auth import authenticate, login
 from django.http import HttpResponse
@@ -24,9 +23,7 @@ def send_otp(request, mobile):
     mobile = mobile
     if mobile is not None:
         if len(mobile) == 10 and mobile.isdigit():
-            time_threshold = now() - timedelta(minutes=5)
-            user_obj = User.objects.filter(mobile=mobile, last_update_date_time__lt=now(),
-                                           last_update_date_time__gt=time_threshold).first()
+            user_obj = User.objects.filter(mobile=mobile).first()
             if user_obj:
                 from django.utils.crypto import get_random_string
                 otp_number = get_random_string(length=6, allowed_chars='0123456789')
